@@ -42,7 +42,7 @@
 	</script>
 	
 	
-	<h1>LISTAGEM DE Locomoção</h1>
+	<h1>LISTAGEM DE RONDAS</h1>
 	
 	<form action="LocomocaoCon">
 		<button type="submit" name="incluir"><i class="fas fa-plus-circle"></i> Incluir</button>

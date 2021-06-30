@@ -25,7 +25,9 @@
 	        		<input class="form-control" type="number" name="id" value="${obj.placa}">
 				</div>
 			</div>
-		
+			
+	
+        	
 	        <button class="btn btn-primary" type="submit" name="gravar">Gravar</button>	
 	        <button type="submit" name="cancelar">Cancelar</button>
 		

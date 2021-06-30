@@ -24,20 +24,14 @@ public class Ronda implements Serializable {
 	private Float latUltima;
 	private Float lonUltima;
 	private Date dataHoraUltima;
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Pessoa> vigilantes;
-	@ManyToOne
-	private Locomocao locomocao;
-	
+
 	
 	private static final long serialVersionUID = 1L;
 
-	public Ronda() {
+	public Ronda(long id, String string, String string2, String string3, String string4, String string5) {
 		super();
 	}   
-	
-	
-	
+
 	
 	public Ronda(Long id, Date dataHoraInicio, Date dataHoraFim, Float latUltima, Float lonUltima, Date dataHoraUltima,
 			List<Pessoa> vigilantes, Locomocao locomocao) {
@@ -48,8 +42,6 @@ public class Ronda implements Serializable {
 		this.latUltima = latUltima;
 		this.lonUltima = lonUltima;
 		this.dataHoraUltima = dataHoraUltima;
-		this.vigilantes = vigilantes;
-		this.locomocao = locomocao;
 	}
 
 
@@ -97,19 +89,4 @@ public class Ronda implements Serializable {
 	public void setDataHoraUltima(Date dataHoraUltima) {
 		this.dataHoraUltima = dataHoraUltima;
 	}   
-	public List<Pessoa> getVigilantes() {
-		return this.vigilantes;
 	}
-
-	public void setVigilantes(List<Pessoa> vigilantes) {
-		this.vigilantes = vigilantes;
-	}   
-	public Locomocao getLocomocao() {
-		return this.locomocao;
-	}
-
-	public void setLocomocao(Locomocao locomocao) {
-		this.locomocao = locomocao;
-	}
-   
-}

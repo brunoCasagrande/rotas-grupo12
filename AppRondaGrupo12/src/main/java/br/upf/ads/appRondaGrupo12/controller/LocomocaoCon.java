@@ -20,7 +20,7 @@ import br.upf.ads.appRondaGrupo12.uteis.Upload;
 import net.iamvegan.multipartrequest.HttpServletMultipartRequest;
 
 /**
- * Servlet implementation class RondaCon
+ * Servlet implementation class LocomocaoCon
  */
 @WebServlet("/Privada/Locomocao/LocomocaoCon")
 public class LocomocaoCon extends HttpServlet {
@@ -61,12 +61,12 @@ public class LocomocaoCon extends HttpServlet {
 	private void listarLocomocao(HttpServletRequest request, HttpServletResponse response, Long idLocomocao) {
 		try {
 			EntityManager em = JpaUtil.getEntityManager();
-			Ronda obj = em.find(Ronda.class, idLocomocao);
+			Locomocao obj = em.find(Locomocao.class, idLocomocao);
 			request.setAttribute("obj", obj);
-			List<Pessoa> pessoas = em.createQuery("from Locomocao order by id").getResultList();
+			List<Locomocao> pessoas = em.createQuery("from Locomocao order by id").getResultList();
 			request.setAttribute("locomocao", pessoas);
 			em.close();
-			request.getRequestDispatcher("Locomocao.jsp").forward(request, response);
+			request.getRequestDispatcher("LocomocaoForm.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -74,25 +74,24 @@ public class LocomocaoCon extends HttpServlet {
 	
 	
 	private void incluirLocomocao(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		em.getTransaction().begin(); 	// inicia a transação
+		EntityManager em = JpaUtil.getEntityManager(); 
+		em.getTransaction().begin(); 	
 
 		Locomocao r = em.find(Locomocao.class, Long.parseLong(request.getParameter("idLocomocao")));
 
-		em.merge(r); // merge no objeto principal = ronda = vigilantes vão ser armazenados em cascata = Cascade na classe!!!
-		em.getTransaction().commit(); 	// commit na transação
+		em.merge(r); 
+		em.getTransaction().commit(); 	
 		em.close();
 
 	}	
 	
 	private void excluirLocomocao(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		em.getTransaction().begin(); 	// inicia a transação
-		// pegar a ronda onde deve ser excluido um vigilante
+		EntityManager em = JpaUtil.getEntityManager(); 
+		em.getTransaction().begin(); 
 		Locomocao r = em.find(Locomocao.class, Long.parseLong(request.getParameter("idLocomocao")));
 
-		em.merge(r); // merge no objeto principal = ronda = vigilantes vão ser armazenados em cascata = Cascade na classe!!!
-		em.getTransaction().commit(); 	// commit na transação
+		em.merge(r); 
+		em.getTransaction().commit(); 	
 		em.close();
 
 		
@@ -101,7 +100,7 @@ public class LocomocaoCon extends HttpServlet {
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			EntityManager em = JpaUtil.getEntityManager();
-			List<Ronda> lista = em.createQuery("from Locomocao").getResultList(); // recuperamos as pessoas do BD
+			List<Locomocao> lista = em.createQuery("from Locomocao").getResultList(); 
 			request.setAttribute("lista", lista);
 			em.close();
 			request.getRequestDispatcher("LocomocaoList.jsp").forward(request, response);
@@ -115,28 +114,24 @@ public class LocomocaoCon extends HttpServlet {
 	}
 
 	private void gravar(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		Ronda p = new Ronda(
-				    Long.parseLong(request.getParameter("id")), 
-					new Date(), 
-					new Date(), 
-					0f, 
-					0f, 
-					new Date(),
-					new ArrayList(), null);
+		EntityManager em = JpaUtil.getEntityManager(); 
+		Locomocao p = new Locomocao(
+				   		Integer.parseInt(request.getParameter("id")), 
+		request.getParameter("decricao"), 
+		request.getParameter("placa"));
 		// ----------------------------------------------------------------------------------
-		em.getTransaction().begin(); 	// inicia a transação
-		em.merge(p); 					// incluir ou alterar o objeto no BD
-		em.getTransaction().commit(); 	// commit na transação
+		em.getTransaction().begin(); 	
+		em.merge(p); 					
+		em.getTransaction().commit(); 	
 		em.close();
 		listar(request, response);
 	}
 
 	private void excluir(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		em.getTransaction().begin(); 	// inicia a transação
-		em.remove(em.find(Ronda.class, Integer.parseInt(request.getParameter("excluir"))));	// excluir o objeto no BD
-		em.getTransaction().commit(); 	// commit na transação
+		EntityManager em = JpaUtil.getEntityManager(); 
+		em.getTransaction().begin(); 	
+		em.remove(em.find(Locomocao.class, Integer.parseInt(request.getParameter("excluir"))));	
+		em.getTransaction().commit(); 	
 		em.close();
 		listar(request, response);
 	}
@@ -144,7 +139,7 @@ public class LocomocaoCon extends HttpServlet {
 	private void alterar(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			EntityManager em = JpaUtil.getEntityManager();
-			Ronda obj = em.find(Ronda.class, Integer.parseInt(request.getParameter("alterar")));
+			Locomocao obj = em.find(Locomocao.class, Integer.parseInt(request.getParameter("alterar")));
 			request.setAttribute("obj", obj);
 			em.close();
 			request.getRequestDispatcher("LocomocaoForm.jsp").forward(request, response);
@@ -155,7 +150,7 @@ public class LocomocaoCon extends HttpServlet {
 
 	private void incluir(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Ronda obj = new Ronda();
+			Locomocao obj = new Locomocao();
 			request.setAttribute("obj", obj);
 			request.getRequestDispatcher("LocomocaoForm.jsp").forward(request, response);
 		} catch (Exception e) {

@@ -21,13 +21,13 @@ import br.upf.ads.appRondaGrupo12.uteis.Upload;
 import net.iamvegan.multipartrequest.HttpServletMultipartRequest;
 
 /**
- * Servlet implementation class RondaCon
+ * Servlet implementation class UsuarioCon
  */
-@WebServlet("/Privada/Ronda/RondaCon")
-public class RondaCon extends HttpServlet {
+@WebServlet("/Privada/Usuario/UsuarioCon")
+public class UsuarioCon extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public RondaCon() {
+    public UsuarioCon() {
         super();
     }
 
@@ -51,21 +51,60 @@ public class RondaCon extends HttpServlet {
 			gravar(request, response);			
 		} else if (request.getParameter("cancelar") != null) {
 			cancelar(request, response);		
-			
-			
+				
 		} else {
 			listar(request, response);
 		}
 		
 	}
+	
+	
+	private void listarUsuario(HttpServletRequest request, HttpServletResponse response, Long idUsuario) {
+		try {
+			EntityManager em = JpaUtil.getEntityManager();
+			Usuario obj = em.find(Usuario.class, idUsuario);
+			request.setAttribute("obj", obj);
+			List<Pessoa> usuario = em.createQuery("from Usuario order by id").getResultList();
+			request.setAttribute("usuario", usuario);
+			em.close();
+			request.getRequestDispatcher("UsuarioForm.jsp").forward(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}	
+	
+	
+	private void incluirUsuario(HttpServletRequest request, HttpServletResponse response) {
+		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
+		em.getTransaction().begin(); 	// inicia a transação
 
+		Usuario r = em.find(Usuario.class, Long.parseLong(request.getParameter("idUsuario")));
+
+		em.merge(r); 
+		em.getTransaction().commit(); 	
+		em.close();
+
+	}	
+	
+	private void excluirLocomocao(HttpServletRequest request, HttpServletResponse response) {
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin(); 	
+		Usuario r = em.find(Usuario.class, Long.parseLong(request.getParameter("idUsuario")));
+
+		em.merge(r); 
+		em.getTransaction().commit(); 	
+		em.close();
+
+		
+	}		
+	
 	private void listar(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			EntityManager em = JpaUtil.getEntityManager();
-			List<Ronda> lista = em.createQuery("from Ronda").getResultList(); // recuperamos as pessoas do BD
+			List<Usuario> lista = em.createQuery("from Usuario").getResultList(); // recuperamos as pessoas do BD
 			request.setAttribute("lista", lista);
 			em.close();
-			request.getRequestDispatcher("RondaList.jsp").forward(request, response);
+			request.getRequestDispatcher("UsuarioForm.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -77,13 +116,11 @@ public class RondaCon extends HttpServlet {
 
 	private void gravar(HttpServletRequest request, HttpServletResponse response) {
 		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		Ronda p = new Ronda(
+		Usuario p = new Usuario(
 				Integer.parseInt(request.getParameter("id")),
-				request.getParameter("dataHoraInicio"), 
-				request.getParameter("dataHoraFim"), 
-				request.getParameter("latUltima"), 
-				request.getParameter("lonUltima"), 
-				request.getParameter("dataHoraUltima"));
+				request.getParameter("nome"), 
+				request.getParameter("login"), 
+				request.getParameter("senha"));
 				
 		// ----------------------------------------------------------------------------------
 		em.getTransaction().begin(); 	// inicia a transação
@@ -94,10 +131,10 @@ public class RondaCon extends HttpServlet {
 	}
 
 	private void excluir(HttpServletRequest request, HttpServletResponse response) {
-		EntityManager em = JpaUtil.getEntityManager(); // pega a entitymanager para persistir
-		em.getTransaction().begin(); 	// inicia a transação
-		em.remove(em.find(Ronda.class, Integer.parseInt(request.getParameter("excluir"))));	// excluir o objeto no BD
-		em.getTransaction().commit(); 	// commit na transação
+		EntityManager em = JpaUtil.getEntityManager();
+		em.getTransaction().begin(); 	
+		em.remove(em.find(Usuario.class, Integer.parseInt(request.getParameter("excluir"))));	
+		em.getTransaction().commit(); 	
 		em.close();
 		listar(request, response);
 	}
@@ -105,10 +142,10 @@ public class RondaCon extends HttpServlet {
 	private void alterar(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			EntityManager em = JpaUtil.getEntityManager();
-			Ronda obj = em.find(Ronda.class, Integer.parseInt(request.getParameter("alterar")));
+			Usuario obj = em.find(Usuario.class, Integer.parseInt(request.getParameter("alterar")));
 			request.setAttribute("obj", obj);
 			em.close();
-			request.getRequestDispatcher("RondaForm.jsp").forward(request, response);
+			request.getRequestDispatcher("UsuarioForm.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -116,12 +153,12 @@ public class RondaCon extends HttpServlet {
 
 	private void incluir(HttpServletRequest request, HttpServletResponse response) {
 		try {
-			Ronda obj = new Ronda();
+			Usuario obj = new Usuario();
 			request.setAttribute("obj", obj);
-			request.getRequestDispatcher("RondaForm.jsp").forward(request, response);
+			request.getRequestDispatcher("UsuarioForm.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}  		
+		} 		
 	}
 
 	/**

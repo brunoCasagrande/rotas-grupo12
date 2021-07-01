@@ -11,7 +11,7 @@ public class InserirUsuario {
         EntityManager em = JpaUtil.getEntityManager();
       
         em.getTransaction().begin();
-        em.merge(new Usuario(1, "dani", "dani", "1234"));
+        em.merge(new Usuario(1, "danier", "danier", "123456"));
         em.getTransaction().commit();
        
 	}
